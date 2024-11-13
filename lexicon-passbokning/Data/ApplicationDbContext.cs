@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using lexicon_passbokning.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace lexicon_passbokning.Data
@@ -9,5 +10,6 @@ namespace lexicon_passbokning.Data
             : base(options)
         {
         }
+        public DbSet<GymClass> GymClasses{ get; set; } = default!;
     }
 }
