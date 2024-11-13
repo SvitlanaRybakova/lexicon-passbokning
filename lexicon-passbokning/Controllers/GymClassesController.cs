@@ -8,16 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using lexicon_passbokning.Data;
 using lexicon_passbokning.Models;
 using lexicon_passbokning.Models.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace lexicon_passbokning.Controllers
 {
     public class GymClassesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public GymClassesController(ApplicationDbContext context)
+        public GymClassesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
 
         // GET: GymClasses
@@ -35,7 +39,10 @@ namespace lexicon_passbokning.Controllers
             }
 
             var gymClass = await _context.GymClasses
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(g => g.AttendingClasses)
+                    .ThenInclude(ug => ug.ApplicationUser)
+                .FirstOrDefaultAsync(g => g.Id == id);
+
             if (gymClass == null)
             {
                 return NotFound();
@@ -145,8 +152,8 @@ namespace lexicon_passbokning.Controllers
 
             return View(model);
         }
-        
-        
+
+
         // GET: GymClasses/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -184,5 +191,49 @@ namespace lexicon_passbokning.Controllers
         {
             return _context.GymClasses.Any(e => e.Id == id);
         }
+
+        // POST book the class
+        // GymClasses/BookingToggle/5
+        public async Task<IActionResult> BookingToggle(int id)
+        {
+            // find the class
+            var gymClass = await _context.GymClasses
+                .Include(user => user.AttendingClasses)
+                .ThenInclude(u => u.ApplicationUser)
+                .FirstOrDefaultAsync(g => g.Id == id);
+
+            if (gymClass == null)
+            {
+                return NotFound();
+            }
+
+            // define the userId
+            var userId = _userManager.GetUserId(User);
+
+            // check if user  has booked the class
+            var existingBooking = gymClass.AttendingClasses
+                .FirstOrDefault(user => user.ApplicationUserId == userId);
+
+            if (existingBooking != null)
+            {
+                // user has already booked the class => delete booking
+                gymClass.AttendingClasses.Remove(existingBooking);
+            }
+            else
+            {
+                // book the class
+                var booking = new ApplicationUserGymClass
+                {
+                    ApplicationUserId = userId,
+                    GymClassId = id
+                };
+                gymClass.AttendingClasses.Add(booking);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

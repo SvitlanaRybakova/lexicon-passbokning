@@ -8,7 +8,7 @@ namespace lexicon_passbokning.Models
         public string LastName { get; set; }
 
         // navigation M-M to the ApplicationUserGymClass join table
-        public ICollection<ApplicationUserGymClass> AttendingMembers { get; set; }
+        public ICollection<ApplicationUserGymClass> AttendingMembers { get; set; } = new List<ApplicationUserGymClass>();
 
 
     }

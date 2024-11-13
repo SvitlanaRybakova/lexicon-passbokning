@@ -10,7 +10,7 @@
         public String Description { get; set; }
 
         // navigation M-M to the ApplicationUserGymClass join table
-        public ICollection<ApplicationUserGymClass> AttendingClasses { get; set; }
+        public ICollection<ApplicationUserGymClass> AttendingClasses { get; set; } = new List<ApplicationUserGymClass>();
 
     }
 }
