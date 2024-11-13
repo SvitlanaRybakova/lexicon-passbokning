@@ -8,5 +8,9 @@
         public TimeSpan Duration { get; set; } 
         public DateTime EndTime { get { return StartTime + Duration; } } 
         public String Description { get; set; }
+
+        // navigation M-M to the ApplicationUserGymClass join table
+        public ICollection<ApplicationUserGymClass> AttendingClasses { get; set; }
+
     }
 }
