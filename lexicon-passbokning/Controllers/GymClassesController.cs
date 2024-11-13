@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using lexicon_passbokning.Data;
 using lexicon_passbokning.Models;
+using lexicon_passbokning.Models.ViewModels;
 
 namespace lexicon_passbokning.Controllers
 {
@@ -54,15 +55,23 @@ namespace lexicon_passbokning.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,StartTime,Duration,Description")] GymClass gymClass)
+        public async Task<IActionResult> Create(GymClassEditCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
+                var gymClass = new GymClass
+                {
+                    Name = model.Name,
+                    StartTime = model.StartTime,
+                    Duration = model.Duration,
+                    Description = model.Description
+                };
+
                 _context.Add(gymClass);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(gymClass);
+            return View(model);
         }
 
         // GET: GymClasses/Edit/5
@@ -78,7 +87,15 @@ namespace lexicon_passbokning.Controllers
             {
                 return NotFound();
             }
-            return View(gymClass);
+            var model = new GymClassEditCreateViewModel
+            {
+                Id = gymClass.Id,
+                Name = gymClass.Name,
+                StartTime = gymClass.StartTime,
+                Duration = gymClass.Duration,
+                Description = gymClass.Description
+            };
+            return View(model);
         }
 
         // POST: GymClasses/Edit/5
@@ -86,18 +103,29 @@ namespace lexicon_passbokning.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartTime,Duration,Description")] GymClass gymClass)
+        public async Task<IActionResult> Edit(int id, GymClassEditCreateViewModel model)
         {
-            if (id != gymClass.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                var gymClass = await _context.GymClasses.FindAsync(id);
+                if (gymClass == null)
+                {
+                    return NotFound();
+                }
+
+                gymClass.Name = model.Name;
+                gymClass.StartTime = model.StartTime;
+                gymClass.Duration = model.Duration;
+                gymClass.Description = model.Description;
+
                 try
                 {
-                    _context.Update(gymClass);
+                    _context.Entry(gymClass).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -111,11 +139,14 @@ namespace lexicon_passbokning.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(gymClass);
-        }
 
+            return View(model);
+        }
+        
+        
         // GET: GymClasses/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
