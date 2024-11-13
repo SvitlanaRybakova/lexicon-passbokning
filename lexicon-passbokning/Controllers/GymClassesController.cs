@@ -9,6 +9,7 @@ using lexicon_passbokning.Data;
 using lexicon_passbokning.Models;
 using lexicon_passbokning.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace lexicon_passbokning.Controllers
 {
@@ -30,6 +31,7 @@ namespace lexicon_passbokning.Controllers
             return View(await _context.GymClasses.ToListAsync());
         }
 
+        [Authorize]
         // GET: GymClasses/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -51,12 +53,14 @@ namespace lexicon_passbokning.Controllers
             return View(gymClass);
         }
 
+        [Authorize]
         // GET: GymClasses/Create
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize]
         // POST: GymClasses/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -81,6 +85,7 @@ namespace lexicon_passbokning.Controllers
             return View(model);
         }
 
+        [Authorize]
         // GET: GymClasses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -105,6 +110,7 @@ namespace lexicon_passbokning.Controllers
             return View(model);
         }
 
+        [Authorize]
         // POST: GymClasses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -172,6 +178,7 @@ namespace lexicon_passbokning.Controllers
             return View(gymClass);
         }
 
+        [Authorize]
         // POST: GymClasses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -192,6 +199,7 @@ namespace lexicon_passbokning.Controllers
             return _context.GymClasses.Any(e => e.Id == id);
         }
 
+        [Authorize]
         // POST book the class
         // GymClasses/BookingToggle/5
         public async Task<IActionResult> BookingToggle(int id)
