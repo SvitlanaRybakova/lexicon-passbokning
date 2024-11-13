@@ -53,14 +53,14 @@ namespace lexicon_passbokning.Controllers
             return View(gymClass);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         // GET: GymClasses/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         // POST: GymClasses/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -85,7 +85,7 @@ namespace lexicon_passbokning.Controllers
             return View(model);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         // GET: GymClasses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -110,7 +110,7 @@ namespace lexicon_passbokning.Controllers
             return View(model);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         // POST: GymClasses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -159,7 +159,7 @@ namespace lexicon_passbokning.Controllers
             return View(model);
         }
 
-
+        [Authorize(Roles = "Admin")]
         // GET: GymClasses/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -178,7 +178,7 @@ namespace lexicon_passbokning.Controllers
             return View(gymClass);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         // POST: GymClasses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
