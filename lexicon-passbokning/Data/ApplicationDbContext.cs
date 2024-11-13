@@ -11,5 +11,13 @@ namespace lexicon_passbokning.Data
         {
         }
         public DbSet<GymClass> GymClasses{ get; set; } = default!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ApplicationUserGymClass>()
+                .HasKey(t => new { t.ApplicationUserId, t.GymClassId });
+        }
     }
 }
