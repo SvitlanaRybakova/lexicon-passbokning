@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34511.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lexicon-passbokning", "lexicon-passbokning\lexicon-passbokning.csproj", "{95810DB6-08C1-48A6-AF98-A3E30A02A864}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{95810DB6-08C1-48A6-AF98-A3E30A02A864}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95810DB6-08C1-48A6-AF98-A3E30A02A864}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95810DB6-08C1-48A6-AF98-A3E30A02A864}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95810DB6-08C1-48A6-AF98-A3E30A02A864}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {02A27713-C40E-4057-AB61-917E05CBEEC9}
+	EndGlobalSection
+EndGlobal
