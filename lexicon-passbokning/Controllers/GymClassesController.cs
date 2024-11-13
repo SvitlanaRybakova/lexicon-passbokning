@@ -204,6 +204,7 @@ namespace lexicon_passbokning.Controllers
 
             if (gymClass == null)
             {
+                TempData["ErrorMessage"] = "Gym class not found.";
                 return NotFound();
             }
 
@@ -218,6 +219,7 @@ namespace lexicon_passbokning.Controllers
             {
                 // user has already booked the class => delete booking
                 gymClass.AttendingClasses.Remove(existingBooking);
+                TempData["WarningMessage"] = "You have successfully unbooked the class.";
             }
             else
             {
@@ -228,9 +230,18 @@ namespace lexicon_passbokning.Controllers
                     GymClassId = id
                 };
                 gymClass.AttendingClasses.Add(booking);
+                TempData["SuccessMessage"] = "You have successfully booked the class.";
             }
 
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An error occurred while saving your changes. Please try again later.";
+                return RedirectToAction(nameof(Index));
+            }
 
             return RedirectToAction(nameof(Index));
         }
