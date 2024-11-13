@@ -1,4 +1,5 @@
 using lexicon_passbokning.Data;
+using lexicon_passbokning.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,9 +17,10 @@ namespace lexicon_passbokning
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-            builder.Services.AddControllersWithViews();
+            // the config auth, here we specify which class represents users and roles, and how they are stored in the database.
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+               .AddRoles<IdentityRole>()
+               .AddEntityFrameworkStores<ApplicationDbContext>();
 
             var app = builder.Build();
 
