@@ -296,5 +296,28 @@ namespace lexicon_passbokning.Controllers
 
             return View(gymClasses);
         }
+
+        // GET GymClasses/MyClassList
+        public async Task<IActionResult> History()
+        {
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var gymClasses = await _context.Set<ApplicationUserGymClass>()
+                .Where(b => b.ApplicationUserId == user.Id && b.GymClass.StartTime < DateTime.Now) // search the previous bookings
+                .Select(b => new GymClassBookingViewModel
+                {
+                    GymClass = b.GymClass,
+                    IsBooked = true
+                })
+                .ToListAsync();
+
+            return View(gymClasses);
+        }
     }
 }

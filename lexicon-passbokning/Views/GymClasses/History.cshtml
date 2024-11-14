@@ -1,0 +1,50 @@
+﻿@model IEnumerable<GymClassBookingViewModel>
+
+@{
+    ViewData["Title"] = "History";
+}
+
+<h1>List of the previous booking</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.GymClass.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GymClass.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GymClass.Duration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GymClass.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GymClass.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GymClass.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GymClass.Duration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GymClass.Description)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.GymClass.Id">Details</a>
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>
