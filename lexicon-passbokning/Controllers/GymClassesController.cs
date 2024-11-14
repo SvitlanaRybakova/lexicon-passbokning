@@ -272,5 +272,29 @@ namespace lexicon_passbokning.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        // GET GymClasses/MyClassList
+        public async Task<IActionResult> MyClassList()
+        {
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+         
+            var gymClasses = await _context.Set<ApplicationUserGymClass>()
+                .Where(b => b.ApplicationUserId == user.Id && b.GymClass.StartTime > DateTime.Now) // Filter for user's bookings and classes that haven't started yet
+                .Select(b => new GymClassBookingViewModel
+                {
+                    GymClass = b.GymClass, 
+                    IsBooked = true 
+                })
+                .ToListAsync();
+
+            return View(gymClasses);
+        }
     }
 }
