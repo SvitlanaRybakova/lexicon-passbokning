@@ -28,7 +28,25 @@ namespace lexicon_passbokning.Controllers
         // GET: GymClasses
         public async Task<IActionResult> Index()
         {
-            return View(await _context.GymClasses.ToListAsync());
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+
+            var gymClasses = await _context.GymClasses
+                .Select(g => new GymClassBookingViewModel
+                {
+                    GymClass = g,
+                    IsBooked = _context.Set<ApplicationUserGymClass>()
+                        .Any(b => b.GymClassId == g.Id && b.ApplicationUserId == user.Id)
+                })
+                .ToListAsync();
+
+            return View(gymClasses);
+           
         }
 
         [Authorize]
