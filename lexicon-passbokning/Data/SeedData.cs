@@ -1,5 +1,6 @@
 ﻿using lexicon_passbokning.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace lexicon_passbokning.Data
 {
@@ -13,6 +14,7 @@ namespace lexicon_passbokning.Data
         public static async Task Init(ApplicationDbContext _context, IServiceProvider services)
         {
             context = _context;
+
 
             if (context.Roles.Any()) return;
 
@@ -30,6 +32,12 @@ namespace lexicon_passbokning.Data
 
             await AddUserToRoleAsync(admin, "Admin");
             await AddUserToRoleAsync(user, "User");
+
+            await AddClassAsync(context, "Zumba", new DateTime(2024, 12, 15, 9, 0, 0), TimeSpan.FromMinutes(60), "A beginner - friendly zumba class focusing on basic postures and relaxation.");
+            await AddClassAsync(context, "Yoga", new DateTime(2024, 11, 15, 9, 0, 0), TimeSpan.FromMinutes(45), "A beginner - friendly zumba class focusing on basic postures and relaxation.");
+            await AddClassAsync(context, "HIIT Workout", new DateTime(2023, 11, 15, 18, 30, 0), TimeSpan.FromMinutes(45), "A high-intensity interval training (HIIT) class designed to burn calories and build endurance.");
+
+
         }
         private static async Task AddUserToRoleAsync(ApplicationUser user, string roleName)
         {
@@ -74,5 +82,34 @@ namespace lexicon_passbokning.Data
                 
             return user;
         }
+
+        private static async Task<GymClass> AddClassAsync(ApplicationDbContext _context, string className, DateTime classStartTime, TimeSpan classDuration, string classDescription)
+        {
+            // Create a new GymClass entity
+            var gymClass = new GymClass
+            {
+                Name = className,
+                StartTime = classStartTime,
+                Duration = classDuration,
+                Description = classDescription
+            };
+
+            // Add the GymClass entity to the DbContext
+            await _context.GymClasses.AddAsync(gymClass);
+
+            // Save the changes to the database
+            var result = await _context.SaveChangesAsync();
+
+            // Check if the save was successful
+            if (result == 0)
+            {
+                Console.WriteLine("Error during seeding: Failed to add class to the database.");
+                throw new Exception("Failed to add class to the database.");
+            }
+
+            return gymClass; // Return the created gym class
+        }
+
+
     }
 }
