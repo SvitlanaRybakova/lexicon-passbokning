@@ -32,7 +32,15 @@ namespace lexicon_passbokning.Controllers
 
             if (user == null)
             {
-                return RedirectToAction("Login", "Account");
+                var allGymClasses = await _context.GymClasses
+            .Select(g => new GymClassBookingViewModel
+            {
+                GymClass = g,
+                IsBooked = false 
+            })
+            .ToListAsync();
+
+                return View(allGymClasses);
             }
 
 
