@@ -28,6 +28,8 @@ namespace lexicon_passbokning
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+
+                await app.SeedDataAsync();
                 app.UseMigrationsEndPoint();
             }
             else
@@ -37,7 +39,6 @@ namespace lexicon_passbokning
                 app.UseHsts();
             }
 
-            await app.SeedDataAsync();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

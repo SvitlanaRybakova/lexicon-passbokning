@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using lexicon_passbokning.Data;
 
@@ -11,9 +12,11 @@ using lexicon_passbokning.Data;
 namespace lexicon_passbokning.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241114121033_Add_TimeOfRegistration")]
+    partial class Add_TimeOfRegistration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -247,7 +250,7 @@ namespace lexicon_passbokning.Data.Migrations
 
                     b.HasIndex("GymClassId");
 
-                    b.ToTable("ApplicationUserGymClass", (string)null);
+                    b.ToTable("ApplicationUserGymClass");
                 });
 
             modelBuilder.Entity("lexicon_passbokning.Models.GymClass", b =>
@@ -274,7 +277,7 @@ namespace lexicon_passbokning.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GymClasses", (string)null);
+                    b.ToTable("GymClasses");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -20,6 +20,21 @@ namespace lexicon_passbokning.Data
 
             modelBuilder.Entity<ApplicationUserGymClass>()
                 .HasKey(t => new { t.ApplicationUserId, t.GymClassId });
+
+            // Configure TimeOfRegistration as a shadow property for ApplicationUser
+            modelBuilder.Entity<ApplicationUser>()
+                .Property<DateTime>("TimeOfRegistration");
+        }
+
+        // set the current data/time when the application user table has been created (just once!)
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            ChangeTracker.DetectChanges();
+            foreach (var entry in ChangeTracker.Entries<ApplicationUser>().Where(e => e.State == EntityState.Added))
+            {
+                entry.Property("TimeOfRegistration").CurrentValue = DateTime.Now;
+            }
+            return base.SaveChangesAsync(cancellationToken);
         }
     }
 }
