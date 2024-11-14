@@ -41,7 +41,7 @@
 
             @foreach (var userGymClass in Model.AttendingClasses)
             {
-                <p>@userGymClass.ApplicationUser.Email</p>
+                <p>@userGymClass.ApplicationUser.FullName</p>
                @* <a asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id">@course.Title</a>*@
             }
 

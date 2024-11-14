@@ -6,10 +6,12 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using lexicon_passbokning.Data;
 using lexicon_passbokning.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace lexicon_passbokning.Areas.Identity.Pages.Account.Manage
 {
@@ -17,13 +19,16 @@ namespace lexicon_passbokning.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationDbContext _context;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         /// <summary>
@@ -31,6 +36,7 @@ namespace lexicon_passbokning.Areas.Identity.Pages.Account.Manage
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public string Username { get; set; }
+        public string RegistrationTime { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -65,8 +71,23 @@ namespace lexicon_passbokning.Areas.Identity.Pages.Account.Manage
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var registrationTime = await _context.Users
+               .Where(u => u.Id == user.Id)
+               .Select(u => EF.Property<DateTime>(u, "TimeOfRegistration"))
+               .FirstOrDefaultAsync();
 
-            Username = userName;
+            var FName = await _context.Users
+               .Where(u => u.Id == user.Id)
+               .Select(u => EF.Property<String>(u, "FirstName"))
+               .FirstOrDefaultAsync();
+
+            var LName = await _context.Users
+               .Where(u => u.Id == user.Id)
+               .Select(u => EF.Property<String>(u, "LastName"))
+               .FirstOrDefaultAsync();
+
+            Username = $"{FName} {LName}";
+            RegistrationTime = registrationTime != null ? registrationTime.ToString("dd/MM/yyyy HH:mm") : "Not Available";
 
             Input = new InputModel
             {
